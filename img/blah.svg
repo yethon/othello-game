@@ -1,0 +1,13 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="402" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <ellipse stroke="#ffffff" ry="195.500008" rx="193.999998" id="svg_1" cy="200.000008" cx="199" fill-opacity="null" stroke-width="null" fill="null"/>
+  <ellipse ry="81" rx="81.5" id="svg_2" cy="158.000001" cx="180.999992" stroke-width="null" fill="#ffffff"/>
+  <text stroke="null" transform="matrix(5.819750659333294,0,0,4.8616289801621155,-788.5794840374465,-443.055718005947) " xml:space="preserve" text-anchor="start" font-family="Oswald, sans-serif" font-size="24" id="svg_4" y="130.690457" x="159.283341" stroke-width="0" fill="#000000">8</text>
+ </g>
+</svg>
