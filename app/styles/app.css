@@ -1,0 +1,26 @@
+.cell {
+    border: 1px solid black;
+    height: 50px;
+    width: 50px;
+}
+.blue {
+    background-color: blue;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin: 5px;
+}
+.red {
+    background-color: red;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin: 5px;
+}
+#currentPlayer.red {
+    color: red;
+}
+#currentPlayer.blue {
+    color: blue;
+}
+
