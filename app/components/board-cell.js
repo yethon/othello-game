@@ -25,13 +25,8 @@ export default Component.extend({
   },
 
   click() {
-    console.warn(this.get('contents'));
-    console.log(`Coordinate ::: [${this.get('rowIndex')}, ${this.get('columnIndex')}]`);
-
+    // TODO: Refactor.
     this.get('game').executePlay(this.get('rowIndex'), this.get('columnIndex'), this.get('contents'));
-
-    this.set('contents', -1);
-    console.warn(this.get('contents'));
   }
 
 });

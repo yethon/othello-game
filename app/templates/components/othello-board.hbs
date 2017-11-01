@@ -1,3 +1,11 @@
-{{#each game.board as |row index|}}
-  {{board-row rowContents=row rowIndex=index}}
-{{/each}}
+{{#each-in game.board as |rowKey rowValues|}}
+<tr id={{rowKey}}>
+  {{#each-in rowValues as |columnKey columnValue|}}
+    {{board-cell contents=columnValue rowIndex=rowKey columnIndex=columnKey}}
+  {{/each-in}}
+</tr>
+{{/each-in}}
+
+<div>
+  {{game.currentPlayerText}}
+</div>
