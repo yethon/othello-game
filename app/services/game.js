@@ -1,31 +1,39 @@
 import Service from '@ember/service';
 import EmberObject, { computed } from '@ember/object';
 
-const DIRECTIONS = [[ -1, 0], [ 1, 0], [ 0, 1], [ 0, -1], [1, 1], [1, -1], [-1,1], [-1, -1]],
+const DIRECTIONS = {
+  N:  [ -1, 0],
+  NE: [ -1,1],
+  E:  [ 0, 1],
+  SE: [ 1, 1],
+  S:  [ 1, 0],
+  SW: [ 1, -1],
+  W:  [ 0, -1],
+  NW: [ -1, -1]
+},
   BOARD_SIZE  = 8;
 
+export const PLAYER_Y = -1;
+export const PLAYER_X  = 1;
+export const PLAYER_NONE = 0;
+
 export default Service.extend({
-  board: EmberObject.extend({}).create(),
+  board: [],
   currentPlayer: 0,
-  PLAYER_BLUE: -1,
-  PLAYER_RED: 1,
-  PLAYER_NONE: 0,
 
   currentPlayerText: computed('currentPlayer', {
     get() {
-      return `current player: ${this.get('currentPlayer') === this.get('PLAYER_BLUE') ? 'BLUE' : 'RED'}`;
+      return `current player: ${this.get('currentPlayer') === PLAYER_Y ? 'BLUE' : 'RED'}`;
     }
   }),
 
   initializeBoard () {
-    this.get('board');
-    let t_row, r, c, cellInitialized, rowKey, cellKey;
+    let t_row, r, c, cellInitialized, cellKey;
 
     //setup initial board state
     //    - all empty, except middle 4 sqares which are alternating colors
     //        ( i.e. [3,3] = red, [3,4] = blue, [4,3] = red, [4,4] = blue )
-    for (r = 0; r <BOARD_SIZE; r += 1) {
-      rowKey = `${r}`;
+    for (r = 0; r < BOARD_SIZE; r += 1) {
       t_row = EmberObject.extend({}).create();
 
       for (c = 0; c < BOARD_SIZE; c += 1) {
@@ -34,53 +42,57 @@ export default Service.extend({
 
         if (r === 3) {
           if (c === 3) {
-            t_row[`${cellKey}`] = this.get('PLAYER_RED');
+            t_row[`${cellKey}`] = PLAYER_X;
             cellInitialized = true;
           } else if (c === 4) {
-            t_row[`${cellKey}`] = this.get('PLAYER_BLUE');
+            t_row[`${cellKey}`] = PLAYER_Y;
             cellInitialized = true;
           }
         } else if (r === 4) {
           if (c === 3) {
-            t_row[`${cellKey}`] = this.get('PLAYER_BLUE');
+            t_row[`${cellKey}`] = PLAYER_Y;
             cellInitialized = true;
           } else if (c === 4) {
-            t_row[`${cellKey}`] = this.get('PLAYER_RED');
+            t_row[`${cellKey}`] = PLAYER_X;
             cellInitialized = true;
           }
         }
         if (!cellInitialized) {
-          t_row[`${cellKey}`] = this.get('PLAYER_NONE');
+          t_row[`${cellKey}`] = PLAYER_NONE;
         }
       }
-      this.get('board').set(`${rowKey}`,t_row);
+      this.get('board').push(t_row);
     }
 
-    this.set('currentPlayer', this.get('PLAYER_BLUE'));
+    this.set('currentPlayer', PLAYER_Y);
   },
 
-  isOnBoard (row, column) {
+  _isOnBoard (row, column) {
+
     return ![row, column].includes(-1) && ![row, column].includes(8);
   },
 
-  emptyCell(row, column) {
-    return this.get('board').get(`${row}`).get(`${column}`) === 0;
+  _emptyCell(row, column) {
+
+    return this.get('board')[row].get(`${column}`) === 0;
   },
 
-  opponentCell(row, column) {
+  _opponentCell(row, column) {
 
-   return this.get('board').get(`${row}`).get(`${column}`) !== this.get('currentPlayer');
+    return this.get('board')[row].get(`${column}`) !== this.get('currentPlayer');
   },
 
-  didOutflankOpponent (row, column) {
+  _didOutflankOpponent (row, column) {
 
-    return this.get('board').get(`${row}`).get(`${column}`) === this.get('currentPlayer');
+    return this.get('board')[row].get(`${column}`) === this.get('currentPlayer');
   },
 
-  flipRow(cells) {
+  _flipRow(cells) {
+
     cells.forEach(([row, column]) => {
-      this.get('board').get(`${row}`).set(`${column}`, this.get('currentPlayer'));
+      this.get('board')[row].set(`${column}`, this.get('currentPlayer'));
     });
+
   },
 
   executePlay (row, column) {
@@ -89,42 +101,38 @@ export default Service.extend({
     row = parseInt(row);
     column = parseInt(column);
 
-    DIRECTIONS.forEach(([x, y]) => {
-      // TODO: Refactor
+    Object.entries(DIRECTIONS).forEach(([direction, [r, c]]) => {
+      let i = r;
+      let j = c;
 
-      let i = x;
-      let j = y;
-
-      if (this.emptyCell(row, column) &&
-        this.isOnBoard(row + i, column + j) &&
-        this.opponentCell(row + i, column + j)) {
+      if (this._emptyCell(row, column) &&
+        this._isOnBoard(row + i, column + j) &&
+        this._opponentCell(row + i, column + j)) {
 
         cells = [];
 
-        while (this.isOnBoard(row + i, column + j) &&
-          !this.emptyCell(row + i, column + j)) {
+        while (this._isOnBoard(row + i, column + j) &&
+          !this._emptyCell(row + i, column + j)) {
 
           cells.push([row + i, column + j])
 
-          // TODO: Could be refactored
-          if (this.didOutflankOpponent(row + i, column + j)) {
-            console.warn(`DIRECTION: ${x},${y}`);
-            this.flipRow(cells);
+          if (this._didOutflankOpponent(row + i, column + j)) {
+            console.warn(`${direction}`);
+            this._flipRow(cells);
             cells = [];
             validChoice = true;
             break;
           }
 
-          i = i + x;
-          j = j + y;
+          i = i + r;
+          j = j + c;
         }
 
       }
     });
 
-
     if (validChoice) {
-      this.get('board').get(`${row}`).set(`${column}`, this.get('currentPlayer'));
+      this.get('board')[row].set(`${column}`, this.get('currentPlayer'));
       this.set('currentPlayer', this.get('currentPlayer') * -1);
     }
 

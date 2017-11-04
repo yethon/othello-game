@@ -1,11 +1,11 @@
 {{#each-in game.board as |rowKey rowValues|}}
 <tr id={{rowKey}}>
   {{#each-in rowValues as |columnKey columnValue|}}
-    {{board-cell contents=columnValue rowIndex=rowKey columnIndex=columnKey}}
+    {{board-cell contents=columnValue rowIndex=rowKey columnIndex=columnKey click=(action "playTurn" rowKey columnKey)}}
   {{/each-in}}
 </tr>
 {{/each-in}}
 
-<div>
+<div class="player-text">
   {{game.currentPlayerText}}
 </div>
