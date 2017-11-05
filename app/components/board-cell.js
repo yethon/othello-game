@@ -3,8 +3,8 @@ import { computed } from '@ember/object';
 import { PLAYER_Y, PLAYER_X } from 'othello-game/services/game';
 
 export default Component.extend({
-  tagName: 'td',
-  classNames: 'cell',
+  tagName: 'div',
+  classNames: 'item',
   classNameBindings: ['blue', 'red'],
   blue: computed ('contents', {
     get() {
