@@ -1,0 +1,27 @@
+.current-player {
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  padding-left: 5vh;
+
+  // TODO: dry-er, get it?
+  .cell{
+    &.white .disc {
+      background-color: white;
+      border-radius: 50%;
+      height: 30px;
+      width: 30px;
+      margin: 5px;
+      border: 1px solid $border_color;
+    }
+
+    &.black .disc {
+      background-color: black;
+      border-radius: 50%;
+      height: 30px;
+      width: 30px;
+      margin: 5px;
+      border: 1px solid $border_color;
+    }
+  }
+}

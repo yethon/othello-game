@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default Component.extend({
   tagName: 'div',
-  classNames: 'game-grid',
+  classNames: 'board-grid',
   game: service('game'),
 
   actions: {

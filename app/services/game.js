@@ -13,9 +13,9 @@ const DIRECTIONS = {
 },
   BOARD_SIZE  = 8;
 
-export const PLAYER_Y = -1;
-export const PLAYER_X  = 1;
-export const PLAYER_NONE = 0;
+export const PLAYER_BLACK = -1;
+export const PLAYER_WHITE = 1;
+export const PLAYER_NONE  = 0;
 
 export default Service.extend({
   board: [],
@@ -23,49 +23,10 @@ export default Service.extend({
 
   currentPlayerText: computed('currentPlayer', {
     get() {
-      return `current player: ${this.get('currentPlayer') === PLAYER_Y ? 'BLUE' : 'RED'}`;
+      return `current player: ${this.get('currentPlayer') === PLAYER_BLACK ? 'BLACK' : 'WHITE'}`;
     }
   }),
 
-  initializeBoard () {
-    let t_row, r, c, cellInitialized, cellKey;
-
-    //setup initial board state
-    //    - all empty, except middle 4 sqares which are alternating colors
-    //        ( i.e. [3,3] = red, [3,4] = blue, [4,3] = red, [4,4] = blue )
-    for (r = 0; r < BOARD_SIZE; r += 1) {
-      t_row = EmberObject.extend({}).create();
-
-      for (c = 0; c < BOARD_SIZE; c += 1) {
-        cellInitialized = false;
-        cellKey = `${c}`;
-
-        if (r === 3) {
-          if (c === 3) {
-            t_row[`${cellKey}`] = PLAYER_X;
-            cellInitialized = true;
-          } else if (c === 4) {
-            t_row[`${cellKey}`] = PLAYER_Y;
-            cellInitialized = true;
-          }
-        } else if (r === 4) {
-          if (c === 3) {
-            t_row[`${cellKey}`] = PLAYER_Y;
-            cellInitialized = true;
-          } else if (c === 4) {
-            t_row[`${cellKey}`] = PLAYER_X;
-            cellInitialized = true;
-          }
-        }
-        if (!cellInitialized) {
-          t_row[`${cellKey}`] = PLAYER_NONE;
-        }
-      }
-      this.get('board').push(t_row);
-    }
-
-    this.set('currentPlayer', PLAYER_Y);
-  },
 
   _isOnBoard (row, column) {
 
@@ -136,5 +97,43 @@ export default Service.extend({
       this.set('currentPlayer', this.get('currentPlayer') * -1);
     }
 
+  },
+
+  initializeBoard () {
+    let t_row, r, c, cellInitialized, cellKey;
+
+    //setup initial board state
+    for (r = 0; r < BOARD_SIZE; r += 1) {
+      t_row = EmberObject.extend({}).create();
+
+      for (c = 0; c < BOARD_SIZE; c += 1) {
+        cellInitialized = false;
+        cellKey = `${c}`;
+
+        if (r === 3) {
+          if (c === 3) {
+            t_row[`${cellKey}`] = PLAYER_WHITE;
+            cellInitialized = true;
+          } else if (c === 4) {
+            t_row[`${cellKey}`] = PLAYER_BLACK;
+            cellInitialized = true;
+          }
+        } else if (r === 4) {
+          if (c === 3) {
+            t_row[`${cellKey}`] = PLAYER_BLACK;
+            cellInitialized = true;
+          } else if (c === 4) {
+            t_row[`${cellKey}`] = PLAYER_WHITE;
+            cellInitialized = true;
+          }
+        }
+        if (!cellInitialized) {
+          t_row[`${cellKey}`] = PLAYER_NONE;
+        }
+      }
+      this.get('board').push(t_row);
+    }
+
+    this.set('currentPlayer', PLAYER_BLACK);
   }
 });

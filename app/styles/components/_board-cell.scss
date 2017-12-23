@@ -1,0 +1,41 @@
+.board-grid {
+  .cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(130deg, $cell_color_1 0%, $cell_color_2 85%, $cell_color_3 100%);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    color: #fff;
+    border-radius: 4px;
+    border: 2px solid $border_color;
+  }
+}
+
+.circle {
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 0;
+  padding-bottom: 100%;
+  width: 100%;
+}
+
+.white {
+  .disc {
+    width: 90%;
+    &::after {
+      @extend .circle;
+      background: white ;
+    }
+  }
+}
+
+.black {
+  .disc {
+    width: 90%;
+    &::after {
+      @extend .circle;
+      background: black ;
+    }
+  }
+}

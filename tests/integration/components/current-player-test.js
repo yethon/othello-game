@@ -6,19 +6,9 @@ moduleForComponent('current-player', 'Integration | Component | current player',
 });
 
 test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  assert.expect(1);
 
   this.render(hbs`{{current-player}}`);
 
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#current-player}}
-      template block text
-    {{/current-player}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+  assert.equal(this.$().text().trim(), `current player: WHITE`);
 });

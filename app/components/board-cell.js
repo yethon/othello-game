@@ -1,19 +1,19 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import { PLAYER_Y, PLAYER_X } from 'othello-game/services/game';
+import { PLAYER_BLACK, PLAYER_WHITE } from 'othello-game/services/game';
 
 export default Component.extend({
   tagName: 'div',
-  classNames: 'item',
-  classNameBindings: ['blue', 'red'],
-  blue: computed ('contents', {
+  classNames: 'cell',
+  classNameBindings: ['black', 'white'],
+  black: computed ('contents', {
     get() {
-      return this.get('contents') === PLAYER_Y;
+      return this.get('contents') === PLAYER_BLACK;
     }
   }),
-  red: computed ('contents', {
+  white: computed ('contents', {
     get() {
-      return this.get('contents') === PLAYER_X;
+      return this.get('contents') === PLAYER_WHITE;
     }
   }),
 
